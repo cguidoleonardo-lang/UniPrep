@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniPrep - Preparación Universitaria Integral</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#151f32',
+                            900: '#0f172a',
+                            950: '#090d16',
+                        },
+                        indigo: {
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                        },
+                        emerald: {
+                            500: '#10b981',
+                            600: '#059669',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-emerald-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                    <i class="fa-solid fa-graduation-cap text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">UniPrep</h1>
+                    <p class="text-xs text-slate-400 hidden sm:block">Tu plataforma de éxito universitario</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="w-2 h-2 mr-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Modo Activo
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Navigation Tabs -->
+    <nav class="bg-slate-900/50 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex space-x-2 sm:space-x-8 overflow-x-auto py-3 no-scrollbar" id="tab-buttons">
+                <button onclick="switchTab('budget')" id="btn-budget" class="tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 bg-indigo-600 text-white shadow-lg shadow-indigo-600/25 whitespace-nowrap">
+                    <i class="fa-solid fa-wallet text-base"></i>
+                    <span>Presupuesto</span>
+                </button>
+                <button onclick="switchTab('exams')" id="btn-exams" class="tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/60 whitespace-nowrap">
+                    <i class="fa-solid fa-calendar-days text-base"></i>
+                    <span>Exámenes</span>
+                </button>
+                <button onclick="switchTab('planner')" id="btn-planner" class="tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/60 whitespace-nowrap">
+                    <i class="fa-solid fa-list-check text-base"></i>
+                    <span>Planificador de Estudio</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- TAB 1: PRESUPUESTO UNIVERSITARIO -->
+        <section id="tab-content-budget" class="space-y-6 tab-content">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        <i class="fa-solid fa-calculator text-indigo-500"></i> Simulador de Presupuesto Universitario
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">Calcula y proyecta tus gastos mensuales estimados para tu etapa universitaria.</p>
+                </div>
+                <!-- Total Card Badge -->
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700/60 rounded-2xl p-4 shadow-xl flex items-center justify-between min-w-[240px]">
+                    <div>
+                        <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Mensual</span>
+                        <div class="text-2xl font-extrabold text-emerald-400 mt-0.5" id="budget-total">$0.00</div>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                        <i class="fa-solid fa-dollar-sign text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Form Column -->
+                <div class="lg:col-span-1 bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
+                    <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-plus-circle text-indigo-500"></i> Nuevo Gasto
+                    </h3>
+                    <form id="budget-form" onsubmit="addExpense(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Categoría</label>
+                            <select id="expense-category" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                                <option value="" disabled selected>Selecciona una categoría</option>
+                                <option value="Matrícula">Matrícula / Cuota</option>
+                                <option value="Transporte">Transporte</option>
+                                <option value="Materiales">Materiales / Libros</option>
+                                <option value="Alquiler">Alquiler / Vivienda</option>
+                                <option value="Alimentación">Alimentación / Comidas</option>
+                                <option value="Tecnología">Tecnología / Software</option>
+                                <option value="Otros">Otros Gastos</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Descripción</label>
+                            <input type="text" id="expense-desc" required placeholder="Ej. Abono mensual de colectivo" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Monto ($)</label>
+                            <input type="number" step="0.01" min="0" id="expense-amount" required placeholder="0.00" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 px-4 rounded-xl shadow-lg shadow-indigo-600/30 transition-all duration-200 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-plus text-sm"></i>
+                            <span>Agregar Gasto</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Table Column -->
+                <div class="lg:col-span-2 bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm flex flex-col">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-receipt text-indigo-500"></i> Desglose de Gastos
+                        </h3>
+                        <button onclick="clearAllExpenses()" class="text-xs text-rose-400 hover:text-rose-300 transition-colors font-medium flex items-center gap-1 bg-rose-500/10 border border-rose-500/20 px-2.5 py-1.5 rounded-lg">
+                            <i class="fa-solid fa-trash-can"></i> Limpiar todo
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto flex-grow">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                                    <th class="py-3 px-4">Categoría</th>
+                                    <th class="py-3 px-4">Descripción</th>
+                                    <th class="py-3 px-4 text-right">Monto</th>
+                                    <th class="py-3 px-4 text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expense-table-body" class="divide-y divide-slate-800/60 text-sm">
+                                <!-- Dynamic rows inserted here -->
+                            </tbody>
+                        </table>
+                        <!-- Empty State -->
+                        <div id="expense-empty" class="hidden flex flex-col items-center justify-center py-12 text-center">
+                            <div class="w-16 h-16 rounded-2xl bg-slate-800/80 flex items-center justify-center text-slate-500 mb-3">
+                                <i class="fa-solid fa-wallet text-2xl"></i>
+                            </div>
+                            <p class="text-slate-300 font-medium">No hay gastos registrados</p>
+                            <p class="text-slate-500 text-xs mt-1">Agrega tus gastos estimados utilizando el formulario.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: CRONOGRAMA DE EXÁMENES -->
+        <section id="tab-content-exams" class="space-y-6 tab-content hidden">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-check text-indigo-500"></i> Cronograma de Exámenes de Ingreso
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">Organiza las fechas clave, materias y sedes de tus pruebas de admisión universitaria.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Form Column -->
+                <div class="lg:col-span-1 bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
+                    <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-plus text-indigo-500"></i> Programar Examen
+                    </h3>
+                    <form id="exam-form" onsubmit="addExam(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Materia / Evaluación</label>
+                            <input type="text" id="exam-subject" required placeholder="Ej. Matemática I - Ingreso" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Fecha y Hora</label>
+                            <input type="datetime-local" id="exam-date" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Sede / Ubicación / Aula</label>
+                            <input type="text" id="exam-venue" required placeholder="Ej. Campus Central, Aula Magna 3" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 px-4 rounded-xl shadow-lg shadow-indigo-600/30 transition-all duration-200 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-calendar-plus text-sm"></i>
+                            <span>Guardar Examen</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Cards Grid Column -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-clock text-indigo-500"></i> Próximas Evaluaciones
+                        </h3>
+                        <button onclick="clearAllExams()" class="text-xs text-rose-400 hover:text-rose-300 transition-colors font-medium flex items-center gap-1 bg-rose-500/10 border border-rose-500/20 px-2.5 py-1.5 rounded-lg">
+                            <i class="fa-solid fa-trash-can"></i> Limpiar todo
+                        </button>
+                    </div>
+                    <div id="exams-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Exam cards inserted here -->
+                    </div>
+                    <!-- Empty State -->
+                    <div id="exams-empty" class="hidden flex flex-col items-center justify-center py-16 text-center bg-slate-900/40 border border-slate-800/80 rounded-2xl">
+                        <div class="w-16 h-16 rounded-2xl bg-slate-800/80 flex items-center justify-center text-slate-500 mb-3">
+                            <i class="fa-solid fa-calendar-xmark text-2xl"></i>
+                        </div>
+                        <p class="text-slate-300 font-medium">No hay exámenes programados</p>
+                        <p class="text-slate-500 text-xs mt-1">Añade tus fechas de ingreso utilizando el formulario.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: PLANIFICADOR / ITINERARIO DE ESTUDIO -->
+        <section id="tab-content-planner" class="space-y-6 tab-content hidden">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-indigo-500"></i> Planificador Semanal de Estudio
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">Organiza tus bloques de estudio y tareas de Lunes a Sábado para mantener el foco.</p>
+                </div>
+            </div>
+
+            <!-- Add Task Bar -->
+            <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
+                <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-plus text-indigo-500"></i> Agregar Bloque o Tarea
+                </h3>
+                <form id="planner-form" onsubmit="addPlannerTask(event)" class="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                    <div class="sm:col-span-3">
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Día de la Semana</label>
+                        <select id="task-day" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                            <option value="Lunes">Lunes</option>
+                            <option value="Martes">Martes</option>
+                            <option value="Miércoles">Miércoles</option>
+                            <option value="Jueves">Jueves</option>
+                            <option value="Viernes">Viernes</option>
+                            <option value="Sábado">Sábado</option>
+                        </select>
+                    </div>
+                    <div class="sm:col-span-7">
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Tarea / Bloque de Estudio</label>
+                        <input type="text" id="task-title" required placeholder="Ej. Resolver guía de ejercicios de física (2 horas)" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                    </div>
+                    <div class="sm:col-span-2 flex items-end">
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 px-4 rounded-xl shadow-lg shadow-indigo-600/30 transition-all duration-200 flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-plus text-sm"></i>
+                            <span>Añadir</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Weekly Grid (Monday to Saturday) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="weekly-grid">
+                <!-- Days populated dynamically -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-900 mt-16 py-6 text-center text-xs text-slate-500">
+        <p>UniPrep &copy; 2026 - Preparación Universitaria Inteligente. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- JavaScript Logic & Persistence -->
+    <script>
+        // --- State Management & LocalStorage ---
+        let state = {
+            expenses: JSON.parse(localStorage.getItem('uniprep_expenses')) || [],
+            exams: JSON.parse(localStorage.getItem('uniprep_exams')) || [],
+            tasks: JSON.parse(localStorage.getItem('uniprep_tasks')) || []
+        };
+
+        function saveState() {
+            localStorage.setItem('uniprep_expenses', JSON.stringify(state.expenses));
+            localStorage.setItem('uniprep_exams', JSON.stringify(state.exams));
+            localStorage.setItem('uniprep_tasks', JSON.stringify(state.tasks));
+        }
+
+        // --- Tab Navigation ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/25');
+                btn.classList.add('text-slate-400', 'hover:text-white', 'hover:bg-slate-800/60');
+            });
+
+            document.getElementById(`tab-content-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.classList.remove('text-slate-400', 'hover:text-white', 'hover:bg-slate-800/60');
+            activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/25');
+        }
+
+        // --- Tab 1: Budget Logic ---
+        function addExpense(e) {
+            e.preventDefault();
+            const category = document.getElementById('expense-category').value;
+            const description = document.getElementById('expense-desc').value.trim();
+            const amount = parseFloat(document.getElementById('expense-amount').value);
+
+            if (!category || !description || isNaN(amount)) return;
+
+            const newExpense = {
+                id: Date.now(),
+                category,
+                description,
+                amount
+            };
+
+            state.expenses.push(newExpense);
+            saveState();
+            renderBudget();
+            document.getElementById('budget-form').reset();
+        }
+
+        function deleteExpense(id) {
+            state.expenses = state.expenses.filter(item => item.id !== id);
+            saveState();
+            renderBudget();
+        }
+
+        function clearAllExpenses() {
+            if (state.expenses.length === 0) return;
+            if (confirm('¿Estás seguro de eliminar todos los gastos registrados?')) {
+                state.expenses = [];
+                saveState();
+                renderBudget();
+            }
+        }
+
+        function renderBudget() {
+            const tbody = document.getElementById('expense-table-body');
+            const emptyState = document.getElementById('expense-empty');
+            const totalEl = document.getElementById('budget-total');
+
+            tbody.innerHTML = '';
+            let total = 0;
+
+            if (state.expenses.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                state.expenses.forEach(item => {
+                    total += item.amount;
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-800/40 transition-colors';
+                    tr.innerHTML = `
+                        <td class="py-3.5 px-4 font-medium text-slate-200">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                                ${item.category}
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-4 text-slate-300">${escapeHtml(item.description)}</td>
+                        <td class="py-3.5 px-4 text-right font-semibold text-emerald-400">$${item.amount.toFixed(2)}</td>
+                        <td class="py-3.5 px-4 text-center">
+                            <button onclick="deleteExpense(${item.id})" class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 transition-colors inline-flex items-center justify-center">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            totalEl.textContent = `$${total.toFixed(2)}`;
+        }
+
+        // --- Tab 2: Exams Logic ---
+        function addExam(e) {
+            e.preventDefault();
+            const subject = document.getElementById('exam-subject').value.trim();
+            const date = document.getElementById('exam-date').value;
+            const venue = document.getElementById('exam-venue').value.trim();
+
+            if (!subject || !date || !venue) return;
+
+            const newExam = {
+                id: Date.now(),
+                subject,
+                date,
+                venue
+            };
+
+            state.exams.push(newExam);
+            // Sort exams by date ascending
+            state.exams.sort((a, b) => new Date(a.date) - new Date(b.date));
+            saveState();
+            renderExams();
+            document.getElementById('exam-form').reset();
+        }
+
+        function deleteExam(id) {
+            state.exams = state.exams.filter(item => item.id !== id);
+            saveState();
+            renderExams();
+        }
+
+        function clearAllExams() {
+            if (state.exams.length === 0) return;
+            if (confirm('¿Estás seguro de eliminar todos los exámenes programados?')) {
+                state.exams = [];
+                saveState();
+                renderExams();
+            }
+        }
+
+        function renderExams() {
+            const grid = document.getElementById('exams-grid');
+            const emptyState = document.getElementById('exams-empty');
+
+            grid.innerHTML = '';
+
+            if (state.exams.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                state.exams.forEach(exam => {
+                    const examDate = new Date(exam.date);
+                    const formattedDate = examDate.toLocaleDateString('es-ES', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    // Calculate days remaining
+                    const now = new Date();
+                    const diffTime = examDate - now;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                    let badgeClass = 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20';
+                    let badgeText = `Faltan ${diffDays} días`;
+                    if (diffDays < 0) {
+                        badgeClass = 'bg-slate-800 text-slate-400 border-slate-700';
+                        badgeText = 'Examen Finalizado';
+                    } else if (diffDays === 0) {
+                        badgeClass = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+                        badgeText = '¡Es hoy!';
+                    } else if (diffDays <= 3) {
+                        badgeClass = 'bg-rose-500/10 text-rose-400 border-rose-500/20';
+                        badgeText = `¡Urgente! Faltan ${diffDays} días`;
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = 'bg-slate-900/70 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-sm flex flex-col justify-between relative group hover:border-slate-700 transition-all';
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-3">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${badgeClass}">
+                                    ${badgeText}
+                                </span>
+                                <button onclick="deleteExam(${exam.id})" class="text-slate-500 hover:text-rose-400 transition-colors p-1">
+                                    <i class="fa-solid fa-trash-can text-sm"></i>
+                                </button>
+                            </div>
+                            <h4 class="text-base font-bold text-white mb-2">${escapeHtml(exam.subject)}</h4>
+                            <div class="space-y-1.5 text-xs text-slate-300">
+                                <p class="flex items-center gap-2">
+                                    <i class="fa-regular fa-calendar text-indigo-400 w-4"></i>
+                                    <span class="capitalize">${formattedDate}</span>
+                                </p>
+                                <p class="flex items-center gap-2">
+                                    <i class="fa-solid fa-location-dot text-emerald-400 w-4"></i>
+                                    <span>${escapeHtml(exam.venue)}</span>
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        // --- Tab 3: Planner Logic ---
+        const weekdays = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+        function addPlannerTask(e) {
+            e.preventDefault();
+            const day = document.getElementById('task-day').value;
+            const title = document.getElementById('task-title').value.trim();
+
+            if (!day || !title) return;
+
+            const newTask = {
+                id: Date.now(),
+                day,
+                title,
+                completed: false
+            };
+
+            state.tasks.push(newTask);
+            saveState();
+            renderPlanner();
+            document.getElementById('task-title').value = '';
+        }
+
+        function toggleTask(id) {
+            state.tasks = state.tasks.map(task => {
+                if (task.id === id) {
+                    return { ...task, completed: !task.completed };
+                }
+                return task;
+            });
+            saveState();
+            renderPlanner();
+        }
+
+        function deleteTask(id) {
+            state.tasks = state.tasks.filter(task => task.id !== id);
+            saveState();
+            renderPlanner();
+        }
+
+        function renderPlanner() {
+            const container = document.getElementById('weekly-grid');
+            container.innerHTML = '';
+
+            weekdays.forEach(day => {
+                const dayTasks = state.tasks.filter(task => task.day === day);
+                const dayCard = document.createElement('div');
+                dayCard.className = 'bg-slate-900/70 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-sm flex flex-col';
+                
+                let tasksHtml = '';
+                if (dayTasks.length === 0) {
+                    tasksHtml = `<div class="text-center py-6 text-slate-500 text-xs italic">No hay tareas para este día</div>`;
+                } else {
+                    tasksHtml = `<div class="space-y-2.5 mt-2">`;
+                    dayTasks.forEach(task => {
+                        tasksHtml += `
+                            <div class="flex items-start justify-between gap-2 bg-slate-800/50 border border-slate-700/50 rounded-xl p-3 group transition-all hover:bg-slate-800">
+                                <label class="flex items-start gap-3 cursor-pointer flex-grow">
+                                    <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTask(${task.id})" class="mt-0.5 rounded border-slate-700 bg-slate-900 text-indigo-600 focus:ring-indigo-500 focus:ring-offset-slate-900 w-4 h-4">
+                                    <span class="text-sm ${task.completed ? 'line-through text-slate-500' : 'text-slate-200'}">${escapeHtml(task.title)}</span>
+                                </label>
+                                <button onclick="deleteTask(${task.id})" class="text-slate-500 hover:text-rose-400 transition-colors opacity-0 group-hover:opacity-100 p-1">
+                                    <i class="fa-solid fa-xmark text-xs"></i>
+                                </button>
+                            </div>
+                        `;
+                    });
+                    tasksHtml += `</div>`;
+                }
+
+                dayCard.innerHTML = `
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-2">
+                        <h4 class="font-bold text-white text-base flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                            ${day}
+                        </h4>
+                        <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">
+                            ${dayTasks.length} ${dayTasks.length === 1 ? 'tarea' : 'tareas'}
+                        </span>
+                    </div>
+                    <div class="flex-grow">
+                        ${tasksHtml}
+                    </div>
+                `;
+                container.appendChild(dayCard);
+            });
+        }
+
+        // --- Helper Security Function ---
+        function escapeHtml(str) {
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // --- Initial Render on Load ---
+        window.addEventListener('DOMContentLoaded', () => {
+            renderBudget();
+            renderExams();
+            renderPlanner();
+        });
+    </script>
+</body>
+</html>
