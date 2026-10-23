@@ -6,8 +6,8 @@
 
 ## 🚀 Demo en Vivo
 
-Puedes probar la aplicación desplegada en Vercel aquí:
-👉 **[Ver UniPrep Online](https://uniprep.vercel.app)** *(reemplaza con tu URL de Vercel)*
+Puedes probar la aplicación desplegada en Vercel aquí:  
+👉 **[https://uniprep-fawn.vercel.app/](https://uniprep-fawn.vercel.app/)**
 
 ---
 
@@ -27,7 +27,7 @@ Puedes probar la aplicación desplegada en Vercel aquí:
 * **Tailwind CSS** (CDN)
 * **FontAwesome** (Íconos)
 * **Git & GitHub** (Control de versiones)
-* **Vercel** (Despliegue)
+* **Vercel** (Despliegue continuo)
 
 ---
 
